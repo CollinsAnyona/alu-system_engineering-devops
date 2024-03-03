@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# SSH CONFIG
+
+Include /etc/ssh/ssh_config.d/*.conf
+
+Host *
+	PasswordAuthentication no
