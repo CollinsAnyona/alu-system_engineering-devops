@@ -1,36 +1,29 @@
 #!/usr/bin/env bash
+# Configures nginx server to respond to status code '404',
+# returns a custom Error 404 page containing "Ceci n'est pas une page".
 
-# Update package lists
 apt-get update
-
-# Install nginx
 apt-get install -y nginx
 
-# Create a custom 404 error page
-echo "<!DOCTYPE html>
-<html lang=\"en\">
-<head>
-    <meta charset=\"UTF-8\">
-    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">
-    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
-    <title>404 Not Found</title>
-</head>
-<body>
-    <h1>Ceci n'est pas une page</h1>
-</body>
-</html>" > /usr/share/nginx/html/404.html
+mkdir /etc/nginx/html
+touch /etc/nginx/html/index.html
+echo "Holberton School" > /etc/nginx/html/index.html
+touch /etc/nginx/html/404.html
+echo "Ceci n'est pas une page" > /etc/nginx/html/404.html
 
-# Update Nginx configuration to use the custom error page for 404 errors
-sed -i '/^    location \/ {/a \
-        error_page 404 /404.html;' /etc/nginx/sites-available/default
+printf %s "server {
+    listen 80;
+    listen [::]:80 default_server;
+    root   /etc/nginx/html;
+    index  index.html index.htm;
+    location /redirect_me {
+        return 301 http://youtube.com/;
+    }
+    error_page 404 /404.html;
+    location /404 {
+      root /etc/nginx/html;
+      internal;
+    }
+}" > /etc/nginx/sites-available/default
 
-# Verify nginx configuration
-nginx -t
-
-# Restart nginx if the configuration is valid
-if [ $? -eq 0 ]; then
-    /etc/init.d/nginx reload
-else
-    echo "Nginx configuration is invalid. Please check the configuration file."
-fi
-
+service nginx restart
