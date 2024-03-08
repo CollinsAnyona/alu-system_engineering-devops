@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 # installs nginx and configure it to listen on port 80
-# print "Holberton School"
-
 # Update package lists
 apt-get update
 
@@ -37,4 +35,13 @@ if [ $? -eq 0 ]; then
 else
     echo "Nginx configuration is invalid. Please check the configuration file."
 fi
+
+# Verify if nginx serves the correct content
+curl -s http://localhost/ | grep -q "Holberton School"
+if [ $? -eq 0 ]; then
+    echo "Nginx serves the correct content."
+else
+    echo "Error: Nginx does not serve the correct content."
+fi
+
 
