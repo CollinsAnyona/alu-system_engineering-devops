@@ -1,22 +1,21 @@
 #!/usr/bin/env bash
-# How to install nginx on a remote server and configure it
-# Update package lists
-sudo apt update 
+# Installs Nginx with the following configurations:
+#+    Listens on port 80.
+#+    Returns a page containing "Holberton School" when queried
+#++    at the root with a curl GET request.
 
-# Install nginx
-sudo apt install nginx -y
+apt-get update
+apt-get install -y nginx
 
-# Create index.html file with "Holberton School" content
-sudo bash -c 'echo "Holberton School" > /var/www/html/index.html'
-# Restart nginx service
-sudo service nginx restart
+mkdir /etc/nginx/html
+touch /etc/nginx/html/index.html
+echo "Holberton School" > /etc/nginx/html/index.html
+printf %s "server {
+     listen      80 default_server;
+     listen      [::]:80 default_server;
+     root        /etc/nginx/html;
+     index       index.html index.htm;
+}
+" > /etc/nginx/sites-available/default
 
-# Verify nginx is listening on port 80 and serving the correct content
-response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost)
-if [ "$response" -eq 200 ]; then
-    echo "Nginx is installed and serving content on port 80."
-    echo "Web server response: $(curl -s http://localhost)"
-else
-    echo "Error: Nginx is not serving content on port 80 or returning an unexpected response."
-fi
-
+service nginx restart
