@@ -7,8 +7,7 @@ sudo apt update
 sudo apt install nginx -y
 
 # Create index.html file with "Holberton School" content
-echo "Holberton School" | sudo tee /var/www/html/index.html > /dev/null
-
+sudo bash -c 'echo "Holberton School" > /var/www/html/index.html'
 # Restart nginx service
 sudo service nginx restart
 
