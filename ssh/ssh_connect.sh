@@ -5,8 +5,8 @@ server_ip="52.204.144.215"
 username="ubuntu"
 
 # Check if the private key file exists
-if [ ! -f "$private_key" ]; then
-    echo "Error: Private key file $private_key not found."
+if [ ! -f "/root/.ssh/school" ]; then
+    echo "Error: Private key file "/root/.ssh/school" not found."
     exit 1
 fi
 
