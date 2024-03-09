@@ -1,47 +1,7 @@
 #!/usr/bin/env bash
-# installs nginx and configure it to listen on port 80
-# Update package lists
-apt-get update
-
-# Install nginx
-apt-get install -y nginx
-
-# Set nginx to listen on port 80
-sed -i 's/^.*listen 80;/    listen 80;/g' /etc/nginx/sites-available/default
-
-# Restart nginx
-/etc/init.d/nginx reload
-
-# Create a temporary HTML file with the required content
-echo "<!DOCTYPE html>
-<html lang=\"en\">
-<head>
-    <meta charset=\"UTF-8\">
-    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">
-    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
-    <title>Welcome to nginx!</title>
-</head>
-<body>
-    <h1>Holberton School</h1>
-</body>
-</html>" > /var/www/html/index.html
-
-# Verify nginx configuration
-nginx -t
-
-# Restart nginx if the configuration is valid
-if [ $? -eq 0 ]; then
-    /etc/init.d/nginx reload
-else
-    echo "Nginx configuration is invalid. Please check the configuration file."
-fi
-
-# Verify if nginx serves the correct content
-curl -s http://localhost/ | grep -q "Holberton School"
-if [ $? -eq 0 ]; then
-    echo "Nginx serves the correct content."
-else
-    echo "Error: Nginx does not serve the correct content."
-fi
-
-
+# How to install nginx on a remote server and configure it
+sudo apt update 
+sudo apt install nginx -y
+sudo touch /var/www/html/index.html
+echo "Holberton School" | sudo tee /var/www/html/index.html 
+sudo service nginx restart
